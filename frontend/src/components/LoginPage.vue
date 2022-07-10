@@ -3,12 +3,26 @@ import { ref } from "vue";
 
 const emit = defineEmits(['successful_login'])
 
+// type Password_Res = {
+//     status: string
+// }
+
 const username = ref<string>("");
 const password = ref<string>("");
-const login_button = () => {
+const login_button = async () => {
   console.log(username.value);
   console.log(password.value);
-  emit('successful_login');
+  const res = await fetch("http://localhost:3000/api/password", {
+    method: "POST",
+    body: JSON.stringify({
+    user: username.value,
+    password: password.value
+  })})
+  const data = await res.json();
+  console.log(data)
+  if( data.status === "true" ){
+    emit('successful_login');
+  }
 };
 </script>
 <template>
